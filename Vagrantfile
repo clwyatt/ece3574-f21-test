@@ -9,11 +9,13 @@ BOOTSTRAP
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
-  # get rig of annoying console.log file 
+  config.vm.boot_timeout = 600
+  
   config.vm.provider "virtualbox" do |vb|
-    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+     vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+     vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
   end
-
+   
   # setup the VM
   config.vm.provision "shell", inline: $bootstrap
 end
